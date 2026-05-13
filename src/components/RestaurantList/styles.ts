@@ -7,6 +7,9 @@ export const ListContainer = styled.section`
   grid-template-columns: 1fr 1fr;
   column-gap: 80px;
   row-gap: 24px;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 80px 0;
 
   @media (max-width: ${breackpoints.mobile}) {
     grid-template-columns: 1fr;

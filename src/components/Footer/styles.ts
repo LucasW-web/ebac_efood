@@ -4,6 +4,7 @@ import { cores } from '../../styles'
 export const FooterContainer = styled.footer`
   background-color: ${cores.salmaoClaro};
   padding: 40px 0;
+  width: 100%;
 `
 
 export const Logo = styled.img`
@@ -17,6 +18,7 @@ export const SocialLinks = styled.ul`
   gap: 8px;
   list-style: none;
   margin-bottom: 80px;
+  padding: 0;
 
   li {
     cursor: pointer;
@@ -26,10 +28,14 @@ export const SocialLinks = styled.ul`
 export const Copyright = styled.p`
   font-size: 10px;
   max-width: 480px;
-  margin: auto 0;
+  margin: 0 auto;
   text-align: center;
+  color: ${cores.salmao};
 `
 export const Centralizador = styled.div`
+  max-width: 1024px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;

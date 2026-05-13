@@ -28,6 +28,8 @@ export const Imagem = styled.div<ImagemProps>`
   }
 
   .container {
+    max-width: 1024px;
+    margin: 0 auto;
     z-index: 1;
     position: relative;
     display: flex;
@@ -38,6 +40,7 @@ export const Imagem = styled.div<ImagemProps>`
 `
 
 export const Categoria = styled.span`
+  color: ${cores.branca};
   font-weight: 100;
   font-size: 32px;
   text-transform: capitalize;

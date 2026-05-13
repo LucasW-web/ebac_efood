@@ -5,20 +5,23 @@ import { cores } from '../../styles'
 export const HeaderContainer = styled.header`
   background-image: url(${FundoHeader});
   background-color: ${cores.salmaoClaro};
-  display: flex;
   align-items: center;
   padding: 40px 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  // position: sticky;
+  // top: 0;
+  // z-index: 100;
+  // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: ${cores.salmao};
 
   .container {
+    max-width: 1024px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-weight: 900;
     font-size: 18px;
+    width: 100%;
   }
 
   a {

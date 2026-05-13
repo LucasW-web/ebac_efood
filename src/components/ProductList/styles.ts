@@ -2,6 +2,10 @@ import styled from 'styled-components'
 import { breackpoints } from '../../styles'
 
 export const ListContainer = styled.div`
+  max-width: 1024px;
+  margin: 56px auto;
+  width: 100%;
+
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 32px;

@@ -1,17 +1,18 @@
 import styled from 'styled-components'
 import HeroImg from '../../assets/images/Vector.png'
 import { breackpoints } from '../../styles'
+import { cores } from '../../styles'
 
 export const Imagem = styled.div`
   background-image: url(${HeroImg});
   width: 100%;
-  height: 360px;
   display: block;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 `
 export const HeroContainer = styled.div`
+  max-width: 2031px;
   padding: 40px 16px;
   align-items: center;
   margin: auto 0;
@@ -23,7 +24,8 @@ export const HeroContainer = styled.div`
     max-width: 540px;
     width: 100%;
     margin: 0 auto;
-    line-height: 42px;
+    line-height: 100%;
+    color: ${cores.salmao};
   }
 
   img {
