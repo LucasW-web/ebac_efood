@@ -12,23 +12,29 @@ export const Imagem = styled.div`
   background-size: cover;
 `
 export const HeroContainer = styled.div`
-  max-width: 2031px;
+  max-width: 1000px;
+  width: 100%;
   padding: 40px 16px;
   align-items: center;
-  margin: auto 0;
+  margin: 0 auto;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   h1 {
+    align-items: center;
     font-weight: 900;
     font-size: 36px;
     max-width: 540px;
     width: 100%;
     margin: 0 auto;
-    line-height: 100%;
+    line-height: 120%;
     color: ${cores.salmao};
   }
 
   img {
+    align-items: center;
     margin-bottom: 139px;
     cursor: pointer;
 

@@ -14,7 +14,6 @@ export const Imagem = styled.div<ImagemProps>`
   background-position: center;
   background-image: url(${(props) => props.foto});
   position: relative;
-  padding: 32px 0;
   color: ${cores.branca};
 
   &::after {
@@ -36,11 +35,14 @@ export const Imagem = styled.div<ImagemProps>`
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    padding: 32px 16px;
+    box-sizing: border-box;
   }
 `
 
 export const Categoria = styled.span`
   color: ${cores.branca};
+  style: thin;
   font-weight: 100;
   font-size: 32px;
   text-transform: capitalize;

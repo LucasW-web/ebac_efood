@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { GlobalCss } from './styles'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -13,6 +14,7 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <GlobalCss />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/perfil/:id" element={<Perfil />} />
