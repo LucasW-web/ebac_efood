@@ -21,7 +21,7 @@ const ProductModal = ({ product, isVisible, onClose }: Props) => {
       dispatch(add(product))
       onClose()
 
-      toast.success('Item adicionao! Ver carrinho', {
+      toast.success('Item adicionado! Ver carrinho', {
         onClick: () => dispatch(open()),
         icon: <span>🛒</span>,
         position: 'bottom-right',
