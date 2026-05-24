@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { RootReducer } from '../../store' // Certifique-se de que o caminho até o store está correto
 import { usePurchaseMutation } from '../../services/api'
 import { clear, close } from '../../store/reducers/cart'
 import * as S from './styles'
@@ -21,14 +22,13 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
   const dispatch = useDispatch()
   const [purchase, { isLoading }] = usePurchaseMutation()
 
-  const itensCarrinho = useSelector((state: any) => state.cart?.items || [])
+  // Tipado corretamente usando RootReducer (Removido o any)
+  const itensCarrinho = useSelector((state: RootReducer) => state.cart.items)
 
-  const precoTotal = itensCarrinho.reduce(
-    (acumulador: number, itemAtual: any) => {
-      return acumulador + itemAtual.preco
-    },
-    0
-  )
+  // Removido o tipo any do itemAtual
+  const precoTotal = itensCarrinho.reduce((acumulador: number, itemAtual) => {
+    return acumulador + itemAtual.preco
+  }, 0)
 
   const [etapa, setEtapa] = useState<'entrega' | 'pagamento' | 'confirmacao'>(
     'entrega'
@@ -60,7 +60,8 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
   const handleFinalizarPedido = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const products = itensCarrinho.map((item: any) => ({
+    // Removido o tipo any do map
+    const products = itensCarrinho.map((item) => ({
       id: item.id,
       price: item.preco
     }))
