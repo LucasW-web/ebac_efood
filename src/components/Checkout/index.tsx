@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { RootReducer } from '../../store' // Certifique-se de que o caminho até o store está correto
+import { RootReducer } from '../../store'
 import { usePurchaseMutation } from '../../services/api'
-import { clear, close } from '../../store/reducers/cart'
+import { clear } from '../../store/reducers/cart'
 import * as S from './styles'
 
 type CheckoutProps = {
@@ -22,10 +22,8 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
   const dispatch = useDispatch()
   const [purchase, { isLoading }] = usePurchaseMutation()
 
-  // Tipado corretamente usando RootReducer (Removido o any)
   const itensCarrinho = useSelector((state: RootReducer) => state.cart.items)
 
-  // Removido o tipo any do itemAtual
   const precoTotal = itensCarrinho.reduce((acumulador: number, itemAtual) => {
     return acumulador + itemAtual.preco
   }, 0)
@@ -52,15 +50,65 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
     expiresYear: ''
   })
 
+  // Funções de Máscara (Formatação Visual)
+  const maskCEP = (value: string) => {
+    return value
+      .replace(/\D/g, '') // Remove tudo que não é número
+      .replace(/(\d{5})(\d)/, '$1-$2') // Adiciona o hífen após o 5º dígito
+      .substring(0, 9) // Limita o tamanho ao formato 00000-000
+  }
+
+  const maskCardNumber = (value: string) => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{4})(\d)/, '$1 $2') // Espaço a cada 4 dígitos
+      .replace(/(\d{4})(\d)/, '$1 $2')
+      .replace(/(\d{4})(\d)/, '$1 $2')
+      .substring(0, 19) // Limita ao formato 0000 0000 0000 0000
+  }
+
+  const maskCVV = (value: string) => {
+    return value.replace(/\D/g, '').substring(0, 3) // Limita a 3 dígitos numéricos
+  }
+
+  const maskMonthOrYear = (value: string) => {
+    return value.replace(/\D/g, '').substring(0, 2) // Limita o mês/ano a 2 dígitos numéricos
+  }
+
+  // Validação ao Avançar da Entrega
   const handleAvancarParaPagamento = (e: React.FormEvent) => {
     e.preventDefault()
+
+    const cepLimpo = delivery.zipCode.replace(/\D/g, '')
+    if (cepLimpo.length !== 8) {
+      alert('Por favor, digite um CEP válido com 8 números.')
+      return
+    }
+
     setEtapa('pagamento')
   }
 
+  // Validação ao Finalizar o Pedido
   const handleFinalizarPedido = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Removido o tipo any do map
+    const cartaoLimpo = payment.cardNumber.replace(/\D/g, '')
+    if (cartaoLimpo.length < 16) {
+      alert('Por favor, digite o número do cartão completo (16 dígitos).')
+      return
+    }
+
+    if (payment.cardCode.length !== 3) {
+      alert('O CVV deve ter exatamente 3 dígitos.')
+      return
+    }
+
+    const mes = Number(payment.expiresMonth)
+    if (mes < 1 || mes > 12) {
+      alert('O mês de vencimento precisa ser entre 01 e 12.')
+      return
+    }
+
     const products = itensCarrinho.map((item) => ({
       id: item.id,
       price: item.preco
@@ -73,7 +121,7 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
         address: {
           description: delivery.description,
           city: delivery.city,
-          zipCode: delivery.zipCode,
+          zipCode: delivery.zipCode, // Pode enviar formatado ou usar cepLimpo se a API exigir apenas números
           number: Number(delivery.number),
           complement: delivery.complement
         }
@@ -152,9 +200,10 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
               <input
                 type="text"
                 required
+                placeholder="00000-000"
                 value={delivery.zipCode}
                 onChange={(e) =>
-                  setDelivery({ ...delivery, zipCode: e.target.value })
+                  setDelivery({ ...delivery, zipCode: maskCEP(e.target.value) })
                 }
               />
             </S.Row>
@@ -213,9 +262,13 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
               <input
                 type="text"
                 required
+                placeholder="0000 0000 0000 0000"
                 value={payment.cardNumber}
                 onChange={(e) =>
-                  setPayment({ ...payment, cardNumber: e.target.value })
+                  setPayment({
+                    ...payment,
+                    cardNumber: maskCardNumber(e.target.value)
+                  })
                 }
               />
             </S.Row>
@@ -224,9 +277,10 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
               <input
                 type="text"
                 required
+                placeholder="000"
                 value={payment.cardCode}
                 onChange={(e) =>
-                  setPayment({ ...payment, cardCode: e.target.value })
+                  setPayment({ ...payment, cardCode: maskCVV(e.target.value) })
                 }
               />
             </S.Row>
@@ -235,22 +289,30 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
             <S.Row>
               <label>Mês de vencimento</label>
               <input
-                type="number"
+                type="text"
                 required
+                placeholder="MM"
                 value={payment.expiresMonth}
                 onChange={(e) =>
-                  setPayment({ ...payment, expiresMonth: e.target.value })
+                  setPayment({
+                    ...payment,
+                    expiresMonth: maskMonthOrYear(e.target.value)
+                  })
                 }
               />
             </S.Row>
             <S.Row>
               <label>Ano de vencimento</label>
               <input
-                type="number"
+                type="text"
                 required
+                placeholder="AA"
                 value={payment.expiresYear}
                 onChange={(e) =>
-                  setPayment({ ...payment, expiresYear: e.target.value })
+                  setPayment({
+                    ...payment,
+                    expiresYear: maskMonthOrYear(e.target.value)
+                  })
                 }
               />
             </S.Row>
@@ -277,12 +339,13 @@ export const Checkout = ({ onBackToCart }: CheckoutProps) => {
             de preparação e, em breve, será entregue no endereço fornecido.
           </S.TextConfirmacao>
           <S.TextConfirmacao style={{ marginBottom: '24px' }}>
-            Gostaria de continuar navegando? Clique no botão abaixo para
-            retornar à nossa lista de restaurantes.
+            Gostaria de agradecer a preferência!
           </S.TextConfirmacao>
-          <S.ButtonPrimary type="button" onClick={() => dispatch(close())}>
-            Concluir
-          </S.ButtonPrimary>
+          <S.ButtonGroup>
+            <S.ButtonPrimary type="button" onClick={onBackToCart}>
+              Concluir
+            </S.ButtonPrimary>
+          </S.ButtonGroup>
         </div>
       )}
     </S.SidebarContainer>

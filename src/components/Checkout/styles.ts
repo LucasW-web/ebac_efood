@@ -2,11 +2,12 @@ import styled from 'styled-components'
 
 export const SidebarContainer = styled.div`
   background-color: #e66767;
-  padding: 0 8px;
-  width: 100%;
-  height: 100%;
+  padding: 32px 24px;
+  max-width: 360px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 `
 
 export const Title = styled.h3`
@@ -33,19 +34,31 @@ export const Row = styled.div`
 
   input {
     background-color: #ffeed2;
-    border: none;
+    border: 1px solid transparent;
     height: 32px;
     padding: 8px;
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 14px;
     color: #4b4b4b;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: #ffeed2;
+    }
   }
 `
 
 export const InlineGroup = styled.div`
   display: flex;
-  gap: 34px;
+  gap: 16px;
+  width: 100%;
+
+  > div {
+    flex: 1;
+  }
 `
 
 export const ButtonGroup = styled.div`
@@ -58,18 +71,30 @@ export const ButtonGroup = styled.div`
 export const ButtonPrimary = styled.button`
   background-color: #ffeed2;
   color: #e66767;
-  border: none;
-  height: 24px;
+  border: 1px solid #ffeed2;
+  height: 32px;
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
   font-size: 14px;
   cursor: pointer;
   width: 100%;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f7e2be;
+    border-color: #f7e2be;
+  }
 `
 
 export const ButtonSecondary = styled(ButtonPrimary)`
   background-color: transparent;
   color: #ffeed2;
+  border: 1px solid #ffeed2;
+
+  &:hover {
+    background-color: rgba(255, 238, 210, 0.1);
+    color: #ffeed2;
+  }
 `
 
 export const TextConfirmacao = styled.p`
